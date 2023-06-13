@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "471300925877",
+    "project_id": "tabzsnappro-f7b56",
+    "storage_bucket": "tabzsnappro-f7b56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471300925877:android:f0a3fd5df1a5fc00b291fc",
+        "android_client_info": {
+          "package_name": "com.example.tabzsnappro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471300925877-tm8hf1esljnnn1t6p17ed4nbqr25hslk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPC3z0cWo7r7PISL9qNXrTgN0MYFsYtLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471300925877-tm8hf1esljnnn1t6p17ed4nbqr25hslk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
