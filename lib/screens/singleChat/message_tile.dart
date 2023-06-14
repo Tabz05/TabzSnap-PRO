@@ -33,7 +33,7 @@ class _MessageTileState extends State<MessageTile> {
 
         for(int i=0;i<n;i++)
         {
-           if(message[i]==' ' || operators.contains(message[i]))
+           if(message[i]==sp || operators.contains(message[i]) || em(message[i]))
            {
               decryptedMessage+=message[i];
            }
