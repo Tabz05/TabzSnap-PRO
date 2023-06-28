@@ -15,7 +15,6 @@ class Agreement extends StatefulWidget {
 class _AgreementState extends State<Agreement> {
   @override
   Widget build(BuildContext context) {
-    final _user = Provider.of<UserIdModel?>(context);
 
     return SafeArea(
         child: Scaffold(

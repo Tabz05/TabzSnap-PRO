@@ -9,6 +9,7 @@ import 'package:tabzsnappro/shared/colors.dart';
 import 'package:tabzsnappro/shared/loading.dart';
 
 class FeedPostTileFin extends StatefulWidget {
+  
   PostModel feedPost;
   FeedPostTileFin(this.feedPost);
 
@@ -19,6 +20,7 @@ class FeedPostTileFin extends StatefulWidget {
 class _FeedPostTileFinState extends State<FeedPostTileFin> {
   @override
   Widget build(BuildContext context) {
+    
     final _userDetails = Provider.of<UserDataModel?>(context);
     final _otherUserDetails = Provider.of<OtherUserDataModel?>(context);
 
@@ -134,23 +136,21 @@ class _FeedPostTileFinState extends State<FeedPostTileFin> {
                     SizedBox(
                       height: 15,
                     ),
-                    !widget.feedPost.postImageUri!.isEmpty? Container(
-                        width: double.infinity,
-                        height: 200,
-                        child: Image(
-                                image:
-                                    NetworkImage(widget.feedPost.postImageUri!),
-                                fit: BoxFit.cover)) : SizedBox(),
-                    SizedBox(
-                      height: 10,
-                    ),
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           widget.feedPost.postText!,
                           style: TextStyle(fontSize: 16),
                           maxLines: 5,
-                        ))
+                        )),
+                    !widget.feedPost.postImageUri!.isEmpty? Container(
+                        width: double.infinity,
+                        height: 200,
+                        margin: EdgeInsets.only(top: 15),
+                        child: Image(
+                                image:
+                                    NetworkImage(widget.feedPost.postImageUri!),
+                                fit: BoxFit.cover)) : SizedBox(),
                   ],
                 ));
   }

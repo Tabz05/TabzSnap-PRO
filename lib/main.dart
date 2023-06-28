@@ -1,12 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tabzsnappro/firebase_options.dart';
 import 'package:tabzsnappro/init_wid.dart';
-import 'package:tabzsnappro/models/user_data_models/user_id_model.dart';
 import 'package:tabzsnappro/screens/agree.dart';
-import 'package:tabzsnappro/services/auth_service.dart';
 
 void main() async{
 

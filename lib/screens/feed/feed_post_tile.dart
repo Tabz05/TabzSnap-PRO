@@ -5,7 +5,6 @@ import 'package:tabzsnappro/models/post_model.dart';
 import 'package:tabzsnappro/models/user_data_models/user_data_model.dart';
 import 'package:tabzsnappro/screens/feed/feed_post_tile_fin.dart';
 import 'package:tabzsnappro/services/database_service.dart';
-import 'package:tabzsnappro/shared/colors.dart';
 
 class FeedPostTile extends StatefulWidget {
   

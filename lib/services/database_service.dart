@@ -543,13 +543,13 @@ class DatabaseService {
   }
 
   //for creating new post
-  Future createNewPost(String text, File? imageFile) async {
+  Future createNewPost(String uid, String text, File? imageFile) async {
     String _postImageUri = "";
     String _postVideoUri = "";
 
     if (imageFile != null) {
       Reference _userPostImage =
-          _firebaseStoragePostsImages.child(uid! + imageFile.toString());
+          _firebaseStoragePostsImages.child(uid + imageFile.toString());
       UploadTask _uploadTask = _userPostImage.putFile(imageFile);
 
       TaskSnapshot _taskSnapshot = await _uploadTask.whenComplete(() {

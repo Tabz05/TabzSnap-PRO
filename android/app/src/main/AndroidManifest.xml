@@ -12,7 +12,7 @@
     </queries>
 
    <application
-        android:label="TabzSnap Pro"
+        android:label="TabzSnap PRO"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

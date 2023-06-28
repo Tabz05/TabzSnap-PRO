@@ -1,11 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tabzsnappro/models/user_data_models/user_id_model.dart';
 import 'package:tabzsnappro/services/database_service.dart';
 import 'package:tabzsnappro/shared/colors.dart';
+import 'package:tabzsnappro/shared/loading.dart';
 
 class NewPost extends StatefulWidget {
   const NewPost({Key? key}) : super(key: key);
@@ -16,39 +16,39 @@ class NewPost extends StatefulWidget {
 
 class _NewPostState extends State<NewPost> {
   
-  File? imageFile = null;
-  final picker = ImagePicker();
+  File? _imageFile = null;
+  final _picker = ImagePicker();
 
-  Future imgFromGallery() async {
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+  Future _imgFromGallery() async {
+    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
       setState(() {
-        imageFile = File(pickedImage.path);
+        _imageFile = File(pickedImage.path);
       });
     }
   }
 
-  Future imgFromCamera() async {
-    final pickedImage = await picker.pickImage(source: ImageSource.camera);
+  Future _imgFromCamera() async {
+    final pickedImage = await _picker.pickImage(source: ImageSource.camera);
 
     if (pickedImage != null) {
       setState(() {
-        imageFile = File(pickedImage.path);
+        _imageFile = File(pickedImage.path);
       });
     }
   }
+
+  TextEditingController _postText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     
-    final user = Provider.of<UserIdModel?>(context);
+    final _user = Provider.of<UserIdModel?>(context);
 
-    final DatabaseService _databaseService = DatabaseService(uid: user!.uid);
+    final DatabaseService _databaseService = DatabaseService();
 
-    TextEditingController postText = TextEditingController();
-
-    return SafeArea(
+    return _user==null?Loading(): SafeArea(
       child: Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
@@ -75,13 +75,13 @@ class _NewPostState extends State<NewPost> {
                       ),
                       cursorColor: red_main,
                       maxLines: 8,
-                      controller: postText,
+                      controller: _postText,
                     ),
                     Row(
                       children: [
                         GestureDetector(
                             onTap: () async {
-                              await imgFromGallery();
+                              await _imgFromGallery();
                             },
                             child: Icon(
                               Icons.image,
@@ -93,7 +93,7 @@ class _NewPostState extends State<NewPost> {
                         ),
                         GestureDetector(
                             onTap: () async {
-                              await imgFromCamera();
+                              await _imgFromCamera();
                             },
                             child: Icon(
                               Icons.camera,
@@ -112,7 +112,7 @@ class _NewPostState extends State<NewPost> {
               SizedBox(
                 height: 30,
               ),
-              imageFile == null
+              _imageFile == null
                   ? SizedBox()
                   : Column(
                       children: [
@@ -120,7 +120,7 @@ class _NewPostState extends State<NewPost> {
                             width: 200,
                             height: 200,
                             child: Image(
-                              image: FileImage(imageFile!),
+                              image: FileImage(_imageFile!),
                               fit: BoxFit.cover,
                             )),
                         SizedBox(
@@ -129,7 +129,7 @@ class _NewPostState extends State<NewPost> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              imageFile = null;
+                              _imageFile = null;
                             });
                           },
                           child: Container(
@@ -154,15 +154,14 @@ class _NewPostState extends State<NewPost> {
               ),
               GestureDetector(
                 onTap: () async {
-                  postText.text.isEmpty && imageFile == null
+                  _postText.text.isEmpty && _imageFile == null
                       ? ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text("Enter text or choose image"),
                           ),
                         )
                       : 
-                       await _databaseService.createNewPost(postText.text, imageFile);
-
+                       await _databaseService.createNewPost(_user.uid!,_postText.text, _imageFile);
                     
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
