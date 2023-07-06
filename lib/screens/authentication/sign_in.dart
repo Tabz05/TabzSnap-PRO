@@ -3,7 +3,6 @@ import 'package:tabzsnappro/services/auth_service.dart';
 import 'package:tabzsnappro/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
-  
   final Function toggleView;
   SignIn(this.toggleView);
 
@@ -12,7 +11,6 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -21,6 +19,7 @@ class _SignInState extends State<SignIn> {
   String _error = "";
 
   bool _loading = false;
+  bool _showPass = false;
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +89,25 @@ class _SignInState extends State<SignIn> {
                                 border: Border.all(color: Colors.black),
                               ),
                               child: TextFormField(
-                                obscureText: true,
+                                obscureText: !_showPass,
                                 decoration: InputDecoration(
-                                    hintText: "Password",
-                                    icon: Icon(Icons.lock),
-                                    border: InputBorder.none),
+                                  hintText: "Password",
+                                  icon: Icon(Icons.lock),
+                                  border: InputBorder.none,
+                                  suffixIcon: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _showPass = !_showPass;
+                                      });
+                                    },
+                                    child: Icon(
+                                      _showPass
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
                                 validator: (String? value) {
                                   if (value != null && value.isEmpty) {
                                     return "please enter password";
@@ -115,7 +128,6 @@ class _SignInState extends State<SignIn> {
                             GestureDetector(
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-
                                   setState(() {
                                     _loading = true;
                                   });
@@ -130,7 +142,7 @@ class _SignInState extends State<SignIn> {
                                           "Could not Sign in. Invalid credentials or no internet connection.";
                                       _loading = false;
                                     });
-                                  } 
+                                  }
                                 }
                               },
                               child: Container(
