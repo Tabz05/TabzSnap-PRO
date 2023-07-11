@@ -1,4 +1,6 @@
-class UserDataModel{
+import 'package:flutter/material.dart';
+
+class UserDataModel with ChangeNotifier{
     
     final String? uid;
     final String? name;

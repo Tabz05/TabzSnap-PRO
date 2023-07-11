@@ -4,5 +4,4 @@ class ChatModel{
   List<String>? recipients = [];
 
   ChatModel({this.chat_id,this.recipients});
-
 }

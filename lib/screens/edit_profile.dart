@@ -158,6 +158,8 @@ class _EditProfileState extends State<EditProfile> {
                       onTap:() async{
                          _imageFile!=null? await _databaseService.uploadProfilePic(_userDetails.uid!,_imageFile!)
                          :print("pressed");
+
+                         _imageFile!=null? ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Updated'))) : print('hi');
                       },
                       child: Container(
                         child: Text('Submit',style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.bold),),

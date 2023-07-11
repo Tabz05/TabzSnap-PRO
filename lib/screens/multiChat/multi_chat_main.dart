@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabzsnappro/models/messages_model.dart';
-import 'package:tabzsnappro/models/user_data_models/user_id_model.dart';
-import 'package:tabzsnappro/screens/singleChat/single_chat_fin.dart';
+import 'package:tabzsnappro/models/multi_message_model.dart';
+import 'package:tabzsnappro/models/user_data_models/user_data_model.dart';
+import 'package:tabzsnappro/screens/multiChat/multi_chat_fin.dart';
 import 'package:tabzsnappro/services/database_service.dart';
 import 'package:tabzsnappro/shared/colors.dart';
 import 'package:tabzsnappro/shared/encryption.dart';
+import 'package:tabzsnappro/shared/loading.dart';
 
-class SingleChatMain extends StatefulWidget {
-  
-  final String chatId;
-  final String otherName;
-  SingleChatMain(this.chatId,this.otherName);
+class MultiChatMain extends StatefulWidget {
+
+  final String? multiChatId;
+  final String? groudName;
+
+  MultiChatMain(this.multiChatId,this.groudName);
 
   @override
-  State<SingleChatMain> createState() => _SingleChatMainState();
+  State<MultiChatMain> createState() => _MultiChatMainState();
 }
 
-class _SingleChatMainState extends State<SingleChatMain> {
+class _MultiChatMainState extends State<MultiChatMain> {
 
+  
   TextEditingController messageToSend = TextEditingController();
-
+  
   @override
   Widget build(BuildContext context) {
- 
-    final _user = Provider.of<UserIdModel?>(context);
-    final DatabaseService _databaseService = DatabaseService(uid:_user!.uid,chatId: widget.chatId);
+
+    final _userDetails = Provider.of<UserDataModel?>(context);
+    final DatabaseService _databaseService = DatabaseService(multiChatId: widget.multiChatId); 
 
     //applying vigenere cipher to encrypt text message
 
@@ -60,17 +63,17 @@ class _SingleChatMainState extends State<SingleChatMain> {
         return encryptedMessage;
     }
       
-    return StreamProvider<List<MessageModel>?>.value(
+    return _userDetails==null? Loading() : StreamProvider<List<MultiMessageModel>?>.value(
       catchError:(_,__)=>null,
       initialData: null,
-      value: DatabaseService(chatId: widget.chatId).getMessages,
+      value: DatabaseService(multiChatId: widget.multiChatId).getMultiMessages,
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
             title: Row(
               children: [
-                Text(widget.otherName.toString()),
+                Text(widget.groudName!),
               ],
             ),
             backgroundColor: red_main,
@@ -80,7 +83,7 @@ class _SingleChatMainState extends State<SingleChatMain> {
             height: double.infinity,
             padding: EdgeInsets.all(10),
             child: Column(children: [
-                SingleChatFin(),
+                MultiChatFin(),
                 Row(children: [
                   Flexible(
                     flex:3,
@@ -98,9 +101,8 @@ class _SingleChatMainState extends State<SingleChatMain> {
                       onTap: () async{
                          if(!messageToSend.text.isEmpty)
                          {
-                            print("hiiiii sending");
                             String encryptedMessage = _encryptMessage(messageToSend.text.toString());
-                            await _databaseService.addMessage(encryptedMessage,DateTime.now().microsecondsSinceEpoch);
+                            await _databaseService.addMultiMessage(encryptedMessage,_userDetails.uid!,_userDetails.name!,_userDetails.hasProfilePic!,_userDetails.profilePicUri!,DateTime.now().microsecondsSinceEpoch);
                             messageToSend.clear();
                          }
                       },
@@ -116,6 +118,5 @@ class _SingleChatMainState extends State<SingleChatMain> {
         )
         )
     );
-
   }
 }

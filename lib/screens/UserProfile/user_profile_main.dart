@@ -68,6 +68,7 @@ class _UserProfileMainState extends State<UserProfileMain> {
             backgroundColor: backgroundColor,
             appBar: AppBar(  
               backgroundColor: red_main,
+              
             ),
             body: Container(
                width: double.infinity,
@@ -86,82 +87,84 @@ class _UserProfileMainState extends State<UserProfileMain> {
             child: Scaffold(
             backgroundColor: backgroundColor,
             appBar: AppBar(
-              backgroundColor: red_main,
-              title: Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: SizedBox(),
-                  ),
-                  Text(_otherUserDetails.name!),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: SizedBox(),
-                  ),
-                  _user.uid != _otherUserDetails.uid
-                      ? Row(
-                          children: [
-                            GestureDetector(
-                              child: Icon(
-                                Icons.message_rounded,
-                                color: Colors.white,
-                                size: 24,
+                backgroundColor: red_main,
+                title: Row(
+                  children: [
+                    _otherUserDetails.hasProfilePic!? CircleAvatar(backgroundImage: NetworkImage(_otherUserDetails.profilePicUri!)) : CircleAvatar(backgroundImage:AssetImage('assets/images/usericon.png')),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: SizedBox(),
+                    ),
+                    Text(_otherUserDetails.name!),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: SizedBox(),
+                    ),
+                    _user.uid != _otherUserDetails.uid
+                        ? Row(
+                            children: [
+                              GestureDetector(
+                                child: Icon(
+                                  Icons.message_rounded,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => SingleChat(
+                                          _otherUserDetails.uid!,
+                                          _otherUserDetails.name!)));
+                                },
                               ),
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => SingleChat(
-                                        _otherUserDetails.uid!,
-                                        _otherUserDetails.name!)));
-                              },
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            GestureDetector(
-                              child: //Icon(Icons.block,color: Colors.white,size: 24,),
-                                  Icon(Icons.block),
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('Block '+_otherUserDetails.name!+"?"),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context,
-                                                        rootNavigator: true)
-                                                    .pop();
-                                              },
-                                              child: Text('No')),
-                                          TextButton(
-                                              onPressed: () async {
+                              SizedBox(
+                                width: 15,
+                              ),
+                              GestureDetector(
+                                child: //Icon(Icons.block,color: Colors.white,size: 24,),
+                                    Icon(Icons.block),
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Block '+_otherUserDetails.name!+"?"),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context,
+                                                          rootNavigator: true)
+                                                      .pop();
+                                                },
+                                                child: Text('No')),
+                                            TextButton(
+                                                onPressed: () async {
 
-                                                await _databaseService.addBlock(
-                                                    _user.uid!,
-                                                    _otherUserDetails.uid!);
-                                                
-                                                Navigator.of(context,
-                                                        rootNavigator: true)
-                                                    .pop();
-                                              },
-                                              child: Text('Yes')),
-                                        ],
-                                      );
-                                    });
-                              },
-                            ),
-                          ],
-                        )
-                      : Flexible(
-                          flex: 1,
-                          fit: FlexFit.tight,
-                          child: SizedBox(),
-                        ),
-                ],
-              ),
+                                                  await _databaseService.addBlock(
+                                                      _user.uid!,
+                                                      _otherUserDetails.uid!);
+                                                  
+                                                  Navigator.of(context,
+                                                          rootNavigator: true)
+                                                      .pop();
+                                                },
+                                                child: Text('Yes')),
+                                          ],
+                                        );
+                                      });
+                                },
+                              ),
+                            ],
+                          )
+                        : Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            child: SizedBox(),
+                          ),
+                  ],
+                ),
+              
             ),
             body: SingleChildScrollView(
               child: Container(

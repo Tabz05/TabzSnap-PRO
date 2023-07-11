@@ -1,6 +1,8 @@
 import 'dart:io'; // for File
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:tabzsnappro/models/multi_chat_model.dart';
+import 'package:tabzsnappro/models/multi_message_model.dart';
 import 'package:tabzsnappro/models/user_data_models/blocked_data_model.dart';
 import 'package:tabzsnappro/models/chat_model.dart';
 import 'package:tabzsnappro/models/messages_model.dart';
@@ -15,6 +17,7 @@ class DatabaseService {
   final String? uid;
   final String? otherId;
   final String? chatId;
+  final String? multiChatId;
   final String? otherUserProfileId;
   final String? usernameToSearch;
   final List<dynamic>? followersList;
@@ -25,6 +28,7 @@ class DatabaseService {
       {this.uid,
       this.otherId,
       this.chatId,
+      this.multiChatId,
       this.otherUserProfileId,
       this.usernameToSearch,
       this.followersList,
@@ -38,6 +42,10 @@ class DatabaseService {
   //collection reference (chats)
   final CollectionReference _chatCollection =
       FirebaseFirestore.instance.collection("chats");
+
+  //collection reference (multi chats)
+  final CollectionReference _multiChatCollection =
+      FirebaseFirestore.instance.collection("multi chats");    
 
   //collection reference (posts)
   final CollectionReference _postCollection =
@@ -294,6 +302,26 @@ class DatabaseService {
     }
   }
 
+  //multi message from snapshot
+
+  List<MultiMessageModel> _multiMessageListFromSnapshot(QuerySnapshot snapshot) {
+    try {
+      return snapshot.docs.map((doc) {
+        return MultiMessageModel(
+          text: doc.get("text") ?? '',
+          sender: doc.get("sender") ?? '',
+          senderUsername: doc.get("senderUsername") ?? '',
+          senderHasProfilePic: doc.get("senderHasProfilePic") ?? false,
+          senderProfilePicUri: doc.get("senderProfilePicUri") ?? '',
+          timeStampMicro: doc.get("timeStampMicro") ?? '',
+        );
+      }).toList();
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
+
   //chat from snapshot
 
   List<ChatModel> _chatListFromSnapshot(QuerySnapshot snapshot) {
@@ -312,14 +340,44 @@ class DatabaseService {
     }
   }
 
+  //multi chat from snapshot
+
+  List<MultiChatModel> _multiChatListFromSnapshot(QuerySnapshot snapshot) {
+    try {
+      return snapshot.docs.map((doc) {
+        return MultiChatModel(
+            chat_id: doc.get("chat_id") ?? '',
+            group_name: doc.get("group_name") ?? '',
+            recipients: (doc.get('recipients') as List<dynamic>?)
+                ?.map((e) => e.toString())
+                .toList() ??
+            []);
+      }).toList();
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
+
+  
+
   //create new chat
   Future<bool?> add_chat() async {
     await _chatCollection.doc(chatId).set({
+      'chat_id': chatId,
       'recipients': [uid, otherId],
-      'chat_id': chatId
     });
 
     return true;
+  }
+
+  //create new multi chat
+  Future addMultiChat(String chatId, String group_name,List<String> recipients) async {
+    await _multiChatCollection.doc(chatId).set({
+      'chat_id': chatId,
+      'group_name': group_name,
+      'recipients': recipients,
+    });
   }
 
   //for adding new message
@@ -328,6 +386,14 @@ class DatabaseService {
         .doc(chatId)
         .collection("messages")
         .add({'text': text, 'sender': uid, 'timeStampMicro': timeStampMicro});
+  }
+
+  //for adding new message
+  Future addMultiMessage(String text,String sender,String senderUsername, bool senderHasProfilePic,String senderProfilePicUri,int timeStampMicro) async {
+    await _multiChatCollection
+        .doc(multiChatId)
+        .collection("multi messages")
+        .add({'text': text, 'sender': sender,'senderUsername':senderUsername,'senderHasProfilePic':senderHasProfilePic,'senderProfilePicUri':senderProfilePicUri, 'timeStampMicro': timeStampMicro});
   }
 
   //for finding username of provided id
@@ -436,6 +502,14 @@ class DatabaseService {
         .update({'blockedBy': FieldValue.arrayUnion(newBlockToAdd)});
   }
 
+  //for deleting a post
+  Future deletePost(String postId) async {
+
+    await _postCollection
+        .doc(postId)
+        .delete();
+  }
+
   //stream for getting user details
   Stream<UserDataModel?> get userDetails {
     return _userCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
@@ -499,12 +573,30 @@ class DatabaseService {
         .map(_messageListFromSnapshot);
   }
 
-  //stream for getting all the chats of current user
+  //stream for getting messages in a single chat
+  Stream<List<MultiMessageModel>> get getMultiMessages {
+    return _multiChatCollection
+        .doc(multiChatId)
+        .collection("multi messages")
+        .orderBy("timeStampMicro")
+        .snapshots()
+        .map(_multiMessageListFromSnapshot);
+  }
+
+  //stream for getting all the single chats of current user
   Stream<List<ChatModel>> get getMyChats {
     return _chatCollection
         .where('recipients', arrayContainsAny: [uid])
         .snapshots()
         .map(_chatListFromSnapshot);
+  }
+
+  //stream for getting all the multi chats of current user
+  Stream<List<MultiChatModel>> get getMyMultiChats {
+    return _multiChatCollection
+        .where('recipients', arrayContainsAny: [uid])
+        .snapshots()
+        .map(_multiChatListFromSnapshot);
   }
 
   //stream for getting posts of a user
