@@ -15,92 +15,129 @@ class SinglePostDetails extends StatefulWidget {
 }
 
 class _SinglePostDetailsState extends State<SinglePostDetails> {
-
   final DatabaseService _databaseService = DatabaseService();
 
   bool _deleted = false;
 
   @override
   Widget build(BuildContext context) {
-
     final _user = Provider.of<UserIdModel?>(context);
 
     return _user == null
         ? Loading()
-        : _deleted? SafeArea(
-          child: Scaffold(
-          backgroundColor: backgroundColor,
-          body: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Post Deleted'),
-              ],
-            )))) : SafeArea(
-            child: Scaffold(
-              backgroundColor: backgroundColor,
-              appBar: AppBar(
-                backgroundColor: red_main,
-              ),
-              body: Container(
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                child: SingleChildScrollView(
-                    child: Column(children: [
-                  SizedBox(
-                    height: 20,
+        : _deleted
+            ? SafeArea(
+                child: Scaffold(
+                    backgroundColor: backgroundColor,
+                    body: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Post Deleted'),
+                          ],
+                        ))))
+            : SafeArea(
+                child: Scaffold(
+                  backgroundColor: backgroundColor,
+                  appBar: AppBar(
+                    backgroundColor: red_main,
                   ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: red_main),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      children: [
-                        Container(
-                            width: double.infinity,
-                            height: 400,
-                            child: !widget.postModel.postImageUri!.isEmpty
-                                ? Image(
-                                    image: NetworkImage(
-                                        widget.postModel.postImageUri!),
-                                    fit: BoxFit.cover,
+                  body: Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    child: SingleChildScrollView(
+                        child: Column(children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: red_main),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Column(
+                          children: [
+                            Container(
+                                width: double.infinity,
+                                height: 400,
+                                child: !widget.postModel.postImageUri!.isEmpty
+                                    ? Image(
+                                        image: NetworkImage(
+                                            widget.postModel.postImageUri!),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image(
+                                        image: AssetImage(
+                                            'assets/images/imageicon.png'),
+                                        fit: BoxFit.cover,
+                                      )),
+                            widget.postModel.postText!.length > 0
+                                ? SizedBox(
+                                    height: 20,
                                   )
-                                : Image(
-                                    image: AssetImage(
-                                        'assets/images/imageicon.png'),
-                                    fit: BoxFit.cover,
-                                  )),
-                        widget.postModel.postText!.length>0 ? SizedBox(
-                          height: 20,
-                        ) : SizedBox(),
-                        widget.postModel.postText!.length>0 ? Container(
-                          width: double.infinity,
-                          child: Text(
-                            widget.postModel.postText!,
-                            style: TextStyle(color: Colors.black, fontSize: 18),
-                          ),
-                        ): SizedBox(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        widget.postModel.owner==_user.uid ? IconButton(
-                            onPressed: ()async{
-                              await _databaseService.deletePost(widget.postModel.postId!);
+                                : SizedBox(),
+                            widget.postModel.postText!.length > 0
+                                ? Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      widget.postModel.postText!,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            widget.postModel.owner == _user.uid
+                                ? IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('Delete Post?'),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context,
+                                                              rootNavigator:
+                                                                  true)
+                                                          .pop();
+                                                    },
+                                                    child: Text('No')),
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      await _databaseService
+                                                          .deletePost(widget
+                                                              .postModel
+                                                              .postId!);
 
-                              setState(() {
-                                _deleted = true;
-                              });
-                            },
-                            icon: Icon(Icons.delete,color: red_main,size: 32)) : SizedBox()
-                      ],
-                    ),
+                                                      Navigator.of(context,
+                                                              rootNavigator:
+                                                                  true)
+                                                          .pop();
+
+                                                      setState(() {
+                                                        _deleted = true;
+                                                      });
+                                                    },
+                                                    child: Text('Yes')),
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    icon: Icon(Icons.delete,
+                                        color: red_main, size: 32))
+                                : SizedBox()
+                          ],
+                        ),
+                      ),
+                    ])),
                   ),
-                ])),
-              ),
-            ),
-          );
+                ),
+              );
   }
 }

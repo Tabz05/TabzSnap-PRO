@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tabzsnappro/models/chat_model.dart';
 import 'package:tabzsnappro/models/user_data_models/other_user_data_model.dart';
 import 'package:tabzsnappro/models/user_data_models/user_data_model.dart';
 import 'package:tabzsnappro/screens/singleChat/single_chat.dart';
@@ -62,10 +63,16 @@ class _ChatTileState extends State<ChatTile> {
                 onTap: () {
                   groupChat? 
                     _selected ? _removeUser(_otherUserDetails.uid!) : _addUser(_otherUserDetails.uid!)
-                   
-                   : Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SingleChat(
-                          _otherUserDetails.uid!, _otherUserDetails.name!)));
+                   : 
+                   Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ChangeNotifierProvider.value(
+                              value: _otherUserDetails,
+                              child: SingleChat(_otherUserDetails.uid!),
+                            ),
+                          ),
+                        );
                 },
                 child: ListTile(
                   leading: groupChat? Container(

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabzsnappro/models/messages_model.dart';
+import 'package:tabzsnappro/models/user_data_models/other_user_data_model.dart';
 import 'package:tabzsnappro/models/user_data_models/user_id_model.dart';
 import 'package:tabzsnappro/screens/singleChat/single_chat_fin.dart';
 import 'package:tabzsnappro/services/database_service.dart';
 import 'package:tabzsnappro/shared/colors.dart';
 import 'package:tabzsnappro/shared/encryption.dart';
+import 'package:tabzsnappro/shared/loading.dart';
 
 class SingleChatMain extends StatefulWidget {
   
   final String chatId;
-  final String otherName;
-  SingleChatMain(this.chatId,this.otherName);
+  SingleChatMain(this.chatId);
 
   @override
   State<SingleChatMain> createState() => _SingleChatMainState();
@@ -25,6 +26,8 @@ class _SingleChatMainState extends State<SingleChatMain> {
   Widget build(BuildContext context) {
  
     final _user = Provider.of<UserIdModel?>(context);
+    final _otherUserDetails = Provider.of<OtherUserDataModel?>(context);
+    
     final DatabaseService _databaseService = DatabaseService(uid:_user!.uid,chatId: widget.chatId);
 
     //applying vigenere cipher to encrypt text message
@@ -60,7 +63,7 @@ class _SingleChatMainState extends State<SingleChatMain> {
         return encryptedMessage;
     }
       
-    return StreamProvider<List<MessageModel>?>.value(
+    return _otherUserDetails==null? Loading() : StreamProvider<List<MessageModel>?>.value(
       catchError:(_,__)=>null,
       initialData: null,
       value: DatabaseService(chatId: widget.chatId).getMessages,
@@ -70,7 +73,9 @@ class _SingleChatMainState extends State<SingleChatMain> {
           appBar: AppBar(
             title: Row(
               children: [
-                Text(widget.otherName.toString()),
+                _otherUserDetails.hasProfilePic!? CircleAvatar(backgroundImage: NetworkImage(_otherUserDetails.profilePicUri!),) : CircleAvatar(backgroundImage: AssetImage('assets/images/usericon.png'),),
+                SizedBox(width: 10),
+                Text(_otherUserDetails.name!),
               ],
             ),
             backgroundColor: red_main,

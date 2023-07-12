@@ -1,4 +1,4 @@
-class ChatModel{
+class ChatModel {
      
   final String? chat_id;
   List<String>? recipients = [];

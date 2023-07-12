@@ -1,4 +1,6 @@
-class OtherUserDataModel{
+import 'package:flutter/material.dart';
+
+class OtherUserDataModel with ChangeNotifier{
     
     final String? uid;
     final String? name;

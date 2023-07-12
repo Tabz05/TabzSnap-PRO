@@ -7,9 +7,9 @@ import 'package:tabzsnappro/services/database_service.dart';
 import 'package:tabzsnappro/shared/loading.dart';
 
 class SingleChat extends StatefulWidget {
+  
   final String otherId;
-  final String otherName;
-  SingleChat(this.otherId, this.otherName);
+  SingleChat(this.otherId);
 
   @override
   State<SingleChat> createState() => _SingleChatState();
@@ -42,7 +42,7 @@ class _SingleChatState extends State<SingleChat> {
             return Loading();
           }
           return snapshot.data == true
-              ? SingleChatMain(_chatId, widget.otherName)
+              ? SingleChatMain(_chatId)
               : Loading();
         });
   }
