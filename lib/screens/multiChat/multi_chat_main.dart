@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabzsnappro/models/multi_message_model.dart';
+import 'package:tabzsnappro/models/message_models/multi_message_model.dart';
 import 'package:tabzsnappro/models/user_data_models/user_data_model.dart';
 import 'package:tabzsnappro/screens/multiChat/multi_chat_fin.dart';
 import 'package:tabzsnappro/services/database_service.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabzsnappro/models/multi_message_model.dart';
+import 'package:tabzsnappro/models/message_models/multi_message_model.dart';
 import 'package:tabzsnappro/screens/multiChat/multi_message_tile.dart';
 
 class MultiChatFin extends StatefulWidget {

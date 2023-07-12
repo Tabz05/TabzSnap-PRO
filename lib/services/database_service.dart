@@ -1,13 +1,14 @@
-import 'dart:io'; // for File
+import 'dart:io'; 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:tabzsnappro/models/multi_chat_model.dart';
-import 'package:tabzsnappro/models/multi_message_model.dart';
+import 'package:tabzsnappro/models/chat_models/multi_chat_model.dart';
+import 'package:tabzsnappro/models/message_models/multi_message_model.dart';
 import 'package:tabzsnappro/models/user_data_models/blocked_data_model.dart';
-import 'package:tabzsnappro/models/chat_model.dart';
-import 'package:tabzsnappro/models/messages_model.dart';
+import 'package:tabzsnappro/models/chat_models/chat_model.dart';
+import 'package:tabzsnappro/models/message_models/messages_model.dart';
 import 'package:tabzsnappro/models/user_data_models/other_user_data_model.dart';
 import 'package:tabzsnappro/models/post_model.dart';
+import 'package:tabzsnappro/models/user_data_models/search_user_data_model.dart';
 import 'package:tabzsnappro/models/user_data_models/user_data_model.dart';
 import 'package:tabzsnappro/models/user_data_models/follower_data_model.dart';
 import 'package:tabzsnappro/models/user_data_models/following_data_model.dart';
@@ -130,10 +131,10 @@ class DatabaseService {
 
   //user list from snapshot
 
-  List<UserDataModel> _userListFromSnapshot(QuerySnapshot snapshot) {
+  List<SearchUserDataModel> _searchUserListFromSnapshot(QuerySnapshot snapshot) {
     try {
       return snapshot.docs.map((doc) {
-        return UserDataModel(
+        return SearchUserDataModel(
             uid: doc.get("uid") ?? '',
             name: doc.get("name") ?? '',
             email: doc.get("email") ?? '',
@@ -277,7 +278,7 @@ class DatabaseService {
                 ?.map((e) => e.toString())
                 .toList() ??
             [],
-            postId: doc.id ?? '');
+            postId: doc.id);
       }).toList();
     } catch (e) {
       print(e.toString());
@@ -396,12 +397,6 @@ class DatabaseService {
         .add({'text': text, 'sender': sender,'senderUsername':senderUsername,'senderHasProfilePic':senderHasProfilePic,'senderProfilePicUri':senderProfilePicUri, 'timeStampMicro': timeStampMicro});
   }
 
-  //for finding username of provided id
-  Future<String?> getUserName(String otherPersonId) async {
-    dynamic result = await _userCollection.doc(otherPersonId).get();
-
-    return result["name"];
-  }
 
   //for following a user
   Future follow(String userId, String userToFollowId) async {
@@ -524,18 +519,19 @@ class DatabaseService {
   }
 
   //stream for getting users
-  Stream<List<UserDataModel>> get getUsers {
+  Stream<List<SearchUserDataModel>> get getUsers {
     if (usernameToSearch != null && usernameToSearch!.isEmpty) {
+  
       return _userCollection
           .where('uid', whereNotIn: blockedList)
           .snapshots()
-          .map(_userListFromSnapshot);
+          .map(_searchUserListFromSnapshot);
     } else {
+     
       return _userCollection
-          .where('uid', whereNotIn: blockedList)
           .where('name', isEqualTo: usernameToSearch)
           .snapshots()
-          .map(_userListFromSnapshot);
+          .map(_searchUserListFromSnapshot);
     }
   }
 

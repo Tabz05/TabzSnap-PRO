@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabzsnappro/models/user_data_models/blocked_data_model.dart';
+import 'package:tabzsnappro/models/user_data_models/search_user_data_model.dart';
 import 'package:tabzsnappro/models/user_data_models/user_data_model.dart';
 import 'package:tabzsnappro/models/user_data_models/user_id_model.dart';
 import 'package:tabzsnappro/screens/userList/find_user_list.dart';
@@ -68,7 +69,7 @@ class _FindUsersState extends State<FindUsers> {
                   },
                 ),
               ),
-              StreamProvider<List<UserDataModel>?>.value(
+              StreamProvider<List<SearchUserDataModel>?>.value(
               catchError:(_,__)=>null,
               initialData: null,
               value: DatabaseService(uid:_userDetails.uid,usernameToSearch:usernameToSearch,blockedList: _blockedList).getUsers,

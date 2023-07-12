@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabzsnappro/models/messages_model.dart';
+import 'package:tabzsnappro/models/message_models/messages_model.dart';
 import 'package:tabzsnappro/screens/singleChat/message_tile.dart';
 
 class SingleChatFin extends StatefulWidget {

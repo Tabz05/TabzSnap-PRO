@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tabzsnappro/models/chat_model.dart';
-import 'package:tabzsnappro/models/multi_chat_model.dart';
+import 'package:tabzsnappro/models/chat_models/chat_model.dart';
+import 'package:tabzsnappro/models/chat_models/multi_chat_model.dart';
 import 'package:tabzsnappro/models/user_data_models/user_id_model.dart';
 import 'package:tabzsnappro/screens/myMultiChats/my_multi_chat_tile.dart';
 import 'package:tabzsnappro/shared/colors.dart';
