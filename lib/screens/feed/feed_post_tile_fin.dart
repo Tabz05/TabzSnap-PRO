@@ -70,6 +70,11 @@ class _FeedPostTileFinState extends State<FeedPostTileFin> {
                         SizedBox(
                           width: 10,
                         ),
+                        (_userDetails.name!)==(_otherUserDetails.name!) ? 
+                        Text(
+                          _otherUserDetails.name!+' (~you)',
+                          style: TextStyle(fontSize: 16),
+                        ) :
                         Text(
                           _otherUserDetails.name!,
                           style: TextStyle(fontSize: 16),
@@ -81,11 +86,12 @@ class _FeedPostTileFinState extends State<FeedPostTileFin> {
                     ),
                     Row(
                       children: [
+                        (_userDetails.uid!)==(_otherUserDetails.uid!)? SizedBox() :
                         GestureDetector(
                           onTap: () async{
 
                             final Email _postReport = Email(
-                              body: 'Post Id: ${widget.feedPost.postId}, User Id: ${_otherUserDetails.uid}, Reported by: ${_userDetails.uid}',
+                              body: 'Post Id: ${widget.feedPost.postId}\n User Id: ${_otherUserDetails.uid}\n Reported by: ${_userDetails.uid}',
                               subject: 'Post Report',
                               recipients: ['tabzappdevep1@gmail.com'],
                               cc: ['tabishtabz18@gmail.com','tabishtabz05@gmail.com'],
@@ -108,6 +114,7 @@ class _FeedPostTileFinState extends State<FeedPostTileFin> {
                           fit: FlexFit.tight,
                           flex: 1,
                         ),
+                        (_userDetails.uid!)==(_otherUserDetails.uid!)? SizedBox() :
                         GestureDetector(
                           onTap: () async {
                             await _databaseService.addPostBlock(

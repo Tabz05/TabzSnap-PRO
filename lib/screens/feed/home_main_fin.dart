@@ -19,8 +19,6 @@ class _HomeMainFinState extends State<HomeMainFin> {
       
       final _userDetails = Provider.of<UserDataModel?>(context);
 
-      print("user details over hereeeee: ${_userDetails}");
-
       List<String>? _followingsList = [];
 
       if(_userDetails!=null)

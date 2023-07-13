@@ -614,20 +614,32 @@ class DatabaseService {
   //for uploading profile picture
 
   Future uploadProfilePic(String uid, File imageFile) async {
-    Reference _userProfilePic = _firebaseStorageProfilePic.child(uid);
-    UploadTask uploadTask = _userProfilePic.putFile(imageFile);
 
-    TaskSnapshot _taskSnapshot = await uploadTask.whenComplete(() {
-      Future<String> _url = _userProfilePic.getDownloadURL();
+    Reference userProfilePic = _firebaseStorageProfilePic.child(uid);
+    UploadTask uploadTask = userProfilePic.putFile(imageFile);
+
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {
+      Future<String> url = userProfilePic.getDownloadURL();
     }).catchError((onError) {
       print(onError);
     });
 
-    dynamic _profilePicUri = await _taskSnapshot.ref.getDownloadURL();
+    dynamic profilePicUri = await taskSnapshot.ref.getDownloadURL();
 
     await _userCollection.doc(uid).update({'hasProfilePic': true});
 
-    await _userCollection.doc(uid).update({'profilePicUri': _profilePicUri});
+    await _userCollection.doc(uid).update({'profilePicUri': profilePicUri});
+  }
+
+  Future removeProfilePic(String uid) async {
+
+    Reference userProfilePic = _firebaseStorageProfilePic.child(uid);
+
+    await userProfilePic.delete();
+
+    await _userCollection.doc(uid).update({'hasProfilePic': false});
+
+    await _userCollection.doc(uid).update({'profilePicUri': ''});
   }
 
   //for creating new post

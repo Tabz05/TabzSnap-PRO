@@ -258,7 +258,7 @@ class _UserProfileMainState extends State<UserProfileMain> {
                               onTap: () async {
                                 final Email _userReport = Email(
                                   body:
-                                      'User Id: ${_otherUserDetails.uid}, Reported by: ${_userDetails.uid}',
+                                      'User Id: ${_otherUserDetails.uid}\nReported by: ${_userDetails.uid}',
                                   subject: 'User Report',
                                   recipients: ['tabzappdevep1@gmail.com'],
                                   cc: [

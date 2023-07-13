@@ -23,6 +23,7 @@ class _HomeFeedState extends State<HomeFeed> {
       return _postsList==null? Loading() : Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
                 margin: EdgeInsets.all(10),

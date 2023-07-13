@@ -1,4 +1,4 @@
-import 'dart:io';   // for File
+import 'dart:io';  
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -131,12 +131,20 @@ class _EditProfileState extends State<EditProfile> {
                         Flexible(child: SizedBox(),flex: 1,fit:FlexFit.tight,),
                       ],
                     ),
-                    _imageFile==null? SizedBox(height: 40,):
+                    _imageFile!=null || _userDetails.hasProfilePic! ? 
                     Column(
                       children: [
                         SizedBox(height: 20,),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () async{
+
+                            if(_userDetails.hasProfilePic!)
+                            {
+                                await _databaseService.removeProfilePic(_userDetails.uid!);
+
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Removed')));
+                            }
+
                             setState(() {
                                _imageFile = null;
                             });
@@ -145,7 +153,7 @@ class _EditProfileState extends State<EditProfile> {
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(  
                               borderRadius: BorderRadius.circular(20),
-                              color: red_main,
+                              color: Colors.yellow[700],
                             ),
                             
                             child: Text('Remove',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: Colors.white),),
@@ -153,8 +161,8 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: 20,)
                       ],
-                    ),
-                    GestureDetector(
+                    ) : SizedBox(),
+                    _imageFile==null? SizedBox() : GestureDetector(
                       onTap:() async{
                          _imageFile!=null? await _databaseService.uploadProfilePic(_userDetails.uid!,_imageFile!)
                          :print("pressed");
@@ -166,7 +174,7 @@ class _EditProfileState extends State<EditProfile> {
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(   
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.yellow[600]
+                          color: Colors.yellow[700]
                         ),
                       ),
                     ),
