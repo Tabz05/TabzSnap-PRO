@@ -43,6 +43,8 @@ class _SinglePostDetailsState extends State<SinglePostDetails> {
                   backgroundColor: backgroundColor,
                   appBar: AppBar(
                     backgroundColor: red_main,
+                    title: Text('Post Details'),
+                    centerTitle:true
                   ),
                   body: Container(
                     width: double.infinity,
