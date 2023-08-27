@@ -163,6 +163,8 @@ class _RegisterState extends State<Register> {
                                     _loading = true;
                                   });
 
+                                  _email = _email.replaceAll(RegExp(r'\s+'), '');
+
                                   dynamic _result =
                                       await _auth.registerWithEmailAndPassword(
                                           _email, _password, _name);
