@@ -132,7 +132,7 @@ class _SignInState extends State<SignIn> {
                                     _loading = true;
                                   });
 
-                                  _email = _email.replaceAll(RegExp(r'\s+'), '');
+                                  _email = _email.trim();
 
                                   dynamic result =
                                       await _auth.signInWithEmailAndPassword(
