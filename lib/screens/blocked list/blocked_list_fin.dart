@@ -22,7 +22,7 @@ class _BlockedListFinState extends State<BlockedListFin> {
         backgroundColor: backgroundColor,
         appBar: AppBar(  
           backgroundColor: red_main,
-          title: Text('Block list'),
+          title: Text('Block list',style: TextStyle(color:Colors.white),),
           centerTitle: true,
         ),
         body: _blockedList.isEmpty? 

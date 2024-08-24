@@ -104,7 +104,7 @@ class _UserProfileMainState extends State<UserProfileMain> {
                         fit: FlexFit.tight,
                         child: SizedBox(),
                       ),
-                      Text(_otherUserDetails.name!),
+                      Text(_otherUserDetails.name!,style:TextStyle(color: Colors.white)),
                       Flexible(
                         flex: 1,
                         fit: FlexFit.tight,

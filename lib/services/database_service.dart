@@ -65,6 +65,7 @@ class DatabaseService {
     return await _userCollection.doc(uid).set({
       'uid': uid!,
       'name': name,
+      'lowercase_name':name.toLowerCase(),
       'email': email,
       'followers': [],
       'followings': [],
@@ -529,7 +530,8 @@ class DatabaseService {
     } else {
      
       return _userCollection
-          .where('name', isEqualTo: usernameToSearch)
+          .where('lowercase_name', isGreaterThanOrEqualTo: usernameToSearch!.toLowerCase())
+          .where('lowercase_name',isLessThanOrEqualTo: (usernameToSearch! + '\uFFFF').toLowerCase())
           .snapshots()
           .map(_searchUserListFromSnapshot);
     }

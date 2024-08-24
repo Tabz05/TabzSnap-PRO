@@ -43,7 +43,7 @@ class _HomeMainState extends State<HomeMain> {
                 Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => NewPost()));
               },
-              child: Icon(Icons.add),
+              child: Icon(Icons.add,color: Colors.white),
               backgroundColor: red_main,
             ),
             bottomNavigationBar: BottomNavigationBar(

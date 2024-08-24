@@ -31,7 +31,7 @@ class _MyChatsFinState extends State<MyChatsFin> {
             child: Scaffold(
               backgroundColor: backgroundColor,
               appBar: AppBar(
-                title: Text("Your Chats"),
+                title: Text("Your Chats",style:TextStyle(color:Colors.white)),
                 centerTitle: true,
                 backgroundColor: red_main,
                 actions: [

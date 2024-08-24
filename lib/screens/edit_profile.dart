@@ -53,7 +53,7 @@ class _EditProfileState extends State<EditProfile> {
             backgroundColor: backgroundColor,
             appBar: AppBar(  
               backgroundColor: red_main,
-              title: Text('Edit Profile'),
+              title: Text('Edit Profile',style:TextStyle(color:Colors.white)),
               centerTitle: true,
             ),
             body: SingleChildScrollView(

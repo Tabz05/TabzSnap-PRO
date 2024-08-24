@@ -5,8 +5,8 @@ import 'package:tabzsnappro/models/user_data_models/user_data_model.dart';
 import 'package:tabzsnappro/screens/multiChat/multi_chat_fin.dart';
 import 'package:tabzsnappro/services/database_service.dart';
 import 'package:tabzsnappro/shared/colors.dart';
-import 'package:tabzsnappro/shared/encryption.dart';
 import 'package:tabzsnappro/shared/loading.dart';
+import 'package:tabzsnappro/shared/encryption.dart';
 
 class MultiChatMain extends StatefulWidget {
 
